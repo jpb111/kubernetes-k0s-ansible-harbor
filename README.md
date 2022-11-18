@@ -56,7 +56,7 @@ Clone the github repo
 
 ```ShellSession
 
-git clone https://github.com/jpb111/k0s-ansible-local-docker-registery.git
+git clone https://github.com/jpb111/kubernetes-k0s-ansible-harbor.git
 
 cd k0s-ansible-local-docker-registery
 
@@ -179,7 +179,7 @@ To use Cluster navigate to inventory/artifacts and copy the path of the file k0s
 
 ```ShellSession
 
-export KUBECONFIG=/Users/johnpaulbabu/Documents/DevOps/k0s-ansible-local-docker-registery/inventory/artifacts/k0s-kubeconfig.yml
+export KUBECONFIG=/Users/johnpaulbabu/Documents/DevOps/kubernetes-k0s-ansible-harbor/inventory/artifacts/k0s-kubeconfig.yml
 
 ```
 
@@ -559,7 +559,7 @@ On the new project page click push command to see how to push and image to the l
 
 ### 10. Push an image to the harbor local docker registery  
 
-Clone the gihub repo https://github.com/jpb111/python-docker-hello-kube.git to download a python flask Hello kube web application. 
+Clone the gihub repo https://github.com/jpb111/python-docker-hello-kube.git to download a python flask hello-kube web application. 
 
 ```ShellSession
 
@@ -701,7 +701,7 @@ Also replace the Password with the password of harbor registery created.
 
 ```ShellSession
 
-kubectl create secret docker-registry docker-registry-creds \
+kubectl create secret docker-registry docker-registry \
  --docker-server="core.harbor.domain" \
  --docker-email=example@gmail.com \
  --docker-username=admin \
@@ -852,6 +852,50 @@ the IP http://192.168.64.17:5000/. We can view the application
 ![hello](images/hello-app1.png). 
 
 
+### 12. Creating a helm chart for the  hello-kube application
+
+In this section we will create a basic helm chart for the hello-kube python application and deploy it in the kubernetes cluster. 
+
+
+
+```ShellSession
+
+helm create hello-kube
+
+```
+
+This commnad will give the structure for the helm chart and create folder hello-kube.
+Since we are using a basic helm chart, We clean up the files and folderse in the hello-kube and 
+make it in the below structure. 
+
+![hello-kube dir](/images/hello-kube-helm.png)
+
+Now we will edit the values.yaml file and add our configurations for deployment which will be passed as variable to deployment.yaml and service.yaml files. 
+
+```yaml
+
+# Default values for hello-kube.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  repository: core.harbor.domain/python/hello
+  pullPolicy: Always
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: "latest"
+
+imagePullSecrets: 
+  - name: docker-registry-creds
+service:
+  type: LoadBalancer
+  port: 80
+
+
+```
+
+
 
 ----Finished------
 
@@ -880,7 +924,7 @@ Run
 
 ```ShellSession
 
-export KUBECONFIG=/Users/johnpaulbabu/Documents/DevOps/k0s-ansible-local-docker-registery/inventory/artifacts/k0s-kubeconfig.yml
+export KUBECONFIG=/Users/johnpaulbabu/Documents/DevOps/kubernetes-k0s-ansible-harbor/inventory/artifacts/k0s-kubeconfig.yml
 
 
 ```
@@ -936,3 +980,4 @@ multipass delete --all
 multipass purge
 
 ```
+

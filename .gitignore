@@ -16,3 +16,4 @@ metallb-configmap.yml
 ca.crt
 .DS_Store
 deployment.yml
+hello-kube
