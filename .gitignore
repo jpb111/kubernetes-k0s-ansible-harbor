@@ -12,7 +12,7 @@ tools/inventory.yml
 distros
 letsencrypt-stagging.yaml
 harbor-values.yaml
-metallb-configmap.yaml
+metallb-configmap.yml
 ca.crt
 .DS_Store
 metallb-configmap.yml

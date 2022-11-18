@@ -711,7 +711,7 @@ kubectl create secret docker-registry docker-registry-creds \
 
 Now lets create a  deployment.yml file we need to add the docker-registry-creds as imagePullSecrets also image path of the harbor registery. 
 
-```ShellSession
+```yaml
 
 cat << EOF > deployment.yml
 
@@ -751,7 +751,8 @@ spec:
         - containerPort: 5000
       imagePullSecrets:
         - name: docker-registry-creds
-EOF 
+EOF
+
 ```
 
 Now deploy the deployment.yml file 
