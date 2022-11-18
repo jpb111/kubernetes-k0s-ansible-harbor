@@ -15,5 +15,4 @@ harbor-values.yaml
 metallb-configmap.yml
 ca.crt
 .DS_Store
-metallb-configmap.yml
 deployment.yml
