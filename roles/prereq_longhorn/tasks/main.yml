@@ -1,0 +1,8 @@
+- name:  Install Longhorn Requirements
+  apt:
+    name: "{{ item }}"
+    state: present
+  with_items: "{{ packages }}"
+
+#- name: Install Longhorn to k0s cluster
+#  command: kubectl apply -f https://raw.githubusercontent.com/longhorn/longhorn/v1.3.2/deploy/longhorn.yaml

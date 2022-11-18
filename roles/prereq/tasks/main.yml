@@ -1,0 +1,38 @@
+---
+
+- name: Create k0s Directories
+  become: true
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: 0755
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+  loop:
+    - "{{ k0s_config_dir }}"
+    - "{{ k0s_data_dir }}"
+    - "{{ k0s_libexec_dir }}"
+
+- name: Write the custom k0s config file
+  template:
+    src: k0s.yaml.j2
+    dest: "{{ k0s_config_dir }}/k0s.yaml"
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: 0600
+  when: k0s_use_custom_config
+
+- name: Generate default k0s config file
+  become: true
+  block:
+    - name: Create default k0s config
+      register: default_k0s_config
+      command: k0s default-config > {{ k0s_config_dir }}/k0s.yaml
+    - name: Store default k0f config
+      copy:
+        dest: "{{ k0s_config_dir }}/k0s.yaml"
+        content: "{{ default_k0s_config.stdout }}"
+        owner: "{{ ansible_user }}"
+        group: "{{ ansible_user }}"
+        mode: 0600
+  when: not k0s_use_custom_config

@@ -1,0 +1,36 @@
+---
+
+- hosts: all
+  name: Download k0s on all nodes
+  become: yes
+  roles:
+    - role: download
+      tags: download
+    - role: prereq
+      tags: prereq
+    - role: prereq_longhorn
+    
+
+- hosts: initial_controller
+  gather_facts: yes
+  become: yes
+  name: Configure initial k0s control plane node
+  roles:
+    - role: k0s/initial_controller
+      tags: init
+
+- hosts: controller
+  gather_facts: yes
+  become: yes
+  serial: 1
+  name: Configure k0s control plane nodes
+  roles:
+    - role: k0s/controller
+      tags: server
+
+- hosts: worker
+  become: yes
+  name: Configure k0s worker nodes
+  roles:
+    - role: k0s/worker
+      tags: worker

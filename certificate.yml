@@ -1,0 +1,31 @@
+- hosts: worker
+  become: yes
+  tasks:
+    - name: copying harbor docker registry certificate file ca.crt to worker nodes
+      copy:
+        src: ca.crt
+        dest: /etc/ssl/certs/
+      tags:
+         - certificates
+
+    - name: update ca certificates
+      command: update-ca-certificates
+      tags:
+         - updateCertificate
+
+    - name: Add 192.168.64.16 core.harbor.domain to worker nodes /etc/hosts
+      tags: hostsFile
+      lineinfile:
+        path: /etc/hosts
+        line: 192.168.64.16 core.harbor.domain
+        state: present
+        backup: yes
+      register: hostsFile
+
+    - name: Reboot the server
+      tags: 
+         - reboot
+      shell: "sleep 5 && reboot"
+      async: 1
+      poll: 0  
+      
