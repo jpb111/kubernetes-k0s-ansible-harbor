@@ -17,3 +17,4 @@ ca.crt
 .DS_Store
 deployment.yml
 hello-kube
+hello-kube-0.1.0.tgz

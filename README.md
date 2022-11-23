@@ -851,6 +851,14 @@ the IP http://192.168.64.17:5000/. We can view the application
 
 ![hello](images/hello-app1.png). 
 
+To delete deployment 
+
+```ShellSession
+
+kubectl delete deployment hello-deployment
+
+```
+
 
 ### 12. Creating a helm chart for the  hello-kube application
 
@@ -869,6 +877,59 @@ Since we are using a basic helm chart, We clean up the files and folderse in the
 make it in the below structure. 
 
 ![hello-kube dir](/images/hello-kube-helm.png)
+
+Now we will edit the deployment.yaml file in the templates folder inside hello-kube
+
+```yaml
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hello-kube
+spec:
+  selector:
+    matchLabels:
+      app:  hello-kube
+  replicas: {{ .Values.replicaCount }}
+  template:
+    metadata:
+      labels:
+        app:  hello-kube
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 5000
+              protocol: TCP
+
+```
+
+
+Later we will edit the service.yaml file 
+
+```yaml
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: hello-kube
+spec:
+  selector:
+    app: hello-kube
+  ports:
+  - protocol: "TCP"
+    port: {{ .Values.service.port }}
+    targetPort: http
+  type: {{ .Values.service.type }}
+
+```
 
 Now we will edit the values.yaml file and add our configurations for deployment which will be passed as variable to deployment.yaml and service.yaml files. 
 
@@ -890,12 +951,85 @@ imagePullSecrets:
   - name: docker-registry-creds
 service:
   type: LoadBalancer
-  port: 80
+  port: 5000
 
 
 ```
 
+now install the helm chart 
 
+```ShellSession
+
+helm install hello-kube hello-kube
+
+```
+
+
+```ShellSession
+
+NAME: hello-kube
+LAST DEPLOYED: Fri Nov 18 16:40:26 2022
+NAMESPACE: default
+STATUS: deployed
+REVISION: 1
+TEST SUITE: None
+
+```
+
+```ShellSession
+
+kubectl get pods -A 
+
+
+NAMESPACE         NAME                                           READY   STATUS    RESTARTS       AGE
+default           hello-kube-77bd555dc9-m4hq2                    1/1     Running   0              9s
+harbor            harbor-chartmuseum-5c5dcd74c-vp7gh             1/1     Running   0              14m
+harbor            harbor-core-547b7999db-mrkcv                   1/1     Running   35 (12m ago)   2d1h
+
+```
+We can see the application running as hello-kube in default name space. 
+
+```ShellSession
+
+kubectl get svc
+
+NAME         TYPE           CLUSTER-IP     EXTERNAL-IP     PORT(S)          AGE
+hello-kube   LoadBalancer   10.99.220.11   192.168.64.17   5000:32675/TCP   14s
+
+```
+```ShellSession
+
+curl 192.168.64.17:5000
+Hello, Kube!%       
+
+```
+
+To delete the deployment 
+```ShellSession
+
+helm delete hello-kube
+
+```
+
+To package the application as a helm chart and upload it a harbor helm chart registry
+
+```ShellSession
+
+helm package hello-kube
+
+```
+
+This will create file hello-kube.0.1.0.tgz in the current folder. 
+
+Upload this file  the harbor local registery in the project folder under helm-char
+
+![file-upload](/images/helm-chart-upload.png)
+
+```ShellSession
+
+helm install --ca-file=ca.crt --username=admin --password=password --version 0.1.0 
+
+```
 
 ----Finished------
 
