@@ -550,7 +550,9 @@ Now we can access harbor at https://core.harbor.domain/
 This is the default harbor domain name, whcih can be changed by configuring the values.yml(https://goharbor.io/docs/1.10/install-config/configure-yml-file/) file of harbor. 
 
 
-Login and change the password. 
+Login and change the password by clicking the admin icon. 
+![passwordchange](images/harbor-password-change.png)
+
 
 Since a secure ssl certificate is not used, in order for docker to allow to push an image to the local docker harbor registry, core.harbor.domain needed to be added as an insecure-registries in daemon.json file. Its is not a good practise. But for testing this should work.
  
@@ -618,7 +620,7 @@ Enter username as admin and the password
 
 ```ShellSession
 Username: admin
-Password
+Password: <Enter the password of harbor login>
 
 ```
 
@@ -693,7 +695,7 @@ ansible-playbook certificate.yml -i inventory/inventory.yml
       
 ```
 
-to copy the ca.crt file to all the worker nodes and < 192.168.64.16 core.harbor.domain > to worker node's
+to copy the ca.crt file to all the multipass worker nodes and also < 192.168.64.16 core.harbor.domain > to worker node's. 
 
 
  ```ShellSession
@@ -704,11 +706,11 @@ to copy the ca.crt file to all the worker nodes and < 192.168.64.16 core.harbor.
 file. 
 
 
-After running this playbook, if needed try to ssh and check in one of the worker nodes to check if the files and text are added if not added it will cause an image pull error when we try to deploy the app. 
+After running this playbook, if needed try to ssh into one of the worker nodes and check if the files and text are < 192.168.64.16 core.harbor.domain > added if not added it will cause an image pull error when we try to deploy the app. 
 
 
 
-create a secret docker-registry 
+### Create a secret docker-registry 
 
 ```ShellSession
 
