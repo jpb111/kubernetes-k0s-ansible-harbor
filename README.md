@@ -243,7 +243,7 @@ kube-system   metrics-server-5b898fd875-rplbk   1/1     Running   0          2m1
 
 ```
 
-### 4. Install [MealLB](https://metallb.universe.tf/) load balancer to access the pods from the host machine. install by [manifest](https://metallb.universe.tf/installation/) 
+### 4. Install [MealLB](https://metallb.universe.tf/) load balancer to access the pods from the host machine, install by [manifest](https://metallb.universe.tf/installation/) 
 
 ```ShellSession
 
