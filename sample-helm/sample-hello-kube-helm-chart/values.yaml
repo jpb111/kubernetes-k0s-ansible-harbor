@@ -1,0 +1,17 @@
+# Default values for hello-kube.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  repository: core.harbor.domain/python/hello
+  pullPolicy: Always
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: "latest"
+
+imagePullSecrets: 
+  - name: docker-registry-creds
+service:
+  type: LoadBalancer
+  port: 5000
