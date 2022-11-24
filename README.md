@@ -19,7 +19,7 @@ By making use of Helm, business will immediately benefit from:
 * Easier rolling back to previous versions of an app
 
 
-In this guide,  Harbor is deployed to Kubernetes as a local helm repository. A hello-kube python application is deployed using the harbor image registry. A helm chart is created for the hello-kube app and is uploaded to the harbor helm charts for the application deployment. 
+In this guide,  Harbor is deployed to Kubernetes as a local helm repository. A hello-kube python application is deployed to kubernetes using the harbor image registry. A helm chart is created for the hello-kube app and is uploaded to the harbor helm charts for the application deployment. k0s kubernetes clusters are deployed using Ansible on Ubuntu instances created using multipass. 
 
 ### [Harbor](https://goharbor.io/)
 
