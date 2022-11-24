@@ -1,6 +1,25 @@
 # Installing Harbor on Kubernetes
 
-In this guide,  Harbor is deployed to Kubernetes as the image registry application. A hello-kube python application is deployed using the harbor image registry. A helm chart is created for the hello-kube app and is uploaded to the harbor helm charts for the application deployment. 
+## Introduction 
+
+Local Helm repositories offer privacy and security that helps organizations share Helm charts throughout the organization with fine access control. 
+
+## Advantages of Helm chart
+
+By making use of Helm, your business will immediately benefit from:
+
+Greatly improved productivity
+Reduced complexity of deployments
+Implementation of cloud-native applications
+More reproducible deployments and results
+Ability to leverage Kubernetes with a single CLI command
+Better scalability
+Ability to re-use Helm charts across multiple environments
+More streamlined CI/CD pipeline
+Easier rolling back to previous versions of an app
+
+
+In this guide,  Harbor is deployed to Kubernetes as a local helm repository. A hello-kube python application is deployed using the harbor image registry. A helm chart is created for the hello-kube app and is uploaded to the harbor helm charts for the application deployment. 
 
 ### [Harbor](https://goharbor.io/)
 
@@ -685,9 +704,11 @@ to copy the ca.crt file to all the worker nodes and < 192.168.64.16 core.harbor.
 file. 
 
 
-this playbook will reboot the worker nodes so  wait till all the nodes are up and running. 
+After running this playbook, if needed try to ssh and check in one of the worker nodes to check if the files and text are added if not added it will cause an image pull error when we try to deploy the app. 
 
-After all the nodes are up and running, create a secret docker-registry 
+
+
+create a secret docker-registry 
 
 ```ShellSession
 
@@ -1025,11 +1046,112 @@ Upload this file  the harbor local registery in the project folder under helm-ch
 
 ![file-upload](/images/helm-chart-upload.png)
 
+
+Adding the helm repo 
+
+![helm repo](/images/helm-repo.png)
+
+
+
 ```ShellSession
 
-helm install --ca-file=ca.crt --username=admin --password=password --version 0.1.0 
+
+helm repo add --ca-file ca.crt  stable https://core.harbor.domain/chartrepo/python
+
+helm search repo stable
 
 ```
+
+```ShellSession
+
+NAME                    CHART VERSION   APP VERSION     DESCRIPTION                       
+stable/hello-kube       0.1.0           1.16.0          A Helm chart for python-hello-kube
+
+```
+
+
+```ShellSession
+
+helm install hello stable/hello-kube  
+
+```
+
+```ShellSession
+
+NAME: hello
+LAST DEPLOYED: Thu Nov 24 11:47:19 2022
+NAMESPACE: default
+STATUS: deployed
+REVISION: 1
+TEST SUITE: None
+
+```
+
+```ShellSession
+
+ kubectl get pods -A
+
+```
+
+Hello is deployed in default name space. 
+
+
+```ShellSession
+
+NAMESPACE         NAME                                           READY   STATUS    RESTARTS         AGE
+default           hello-kube-58cfd8cb66-fn54s                    1/1     Running   0                13s
+harbor            harbor-chartmuseum-5c5dcd74c-8w8zd             1/1     Running   0                3h10m
+harbor            harbor-core-547b7999db-mrkcv                   1/1     Running   57 (31m ago)     7d21h
+harbor            harbor-jobservice-766f5d4ff9-zvdgb             1/1     Running   5 (29m ago)      22h
+
+```
+
+Let get the external IP address assigned by metallb. 
+
+```ShellSession
+
+kubectl get svc   
+
+NAME         TYPE           CLUSTER-IP       EXTERNAL-IP     PORT(S)          AGE
+hello-kube   LoadBalancer   10.103.253.160   192.168.64.17   5000:32119/TCP   79s
+
+```
+
+Check if the app is running in the given IP. 
+
+```ShellSession
+
+curl 192.168.64.17:5000
+
+```
+
+```ShellSession
+
+Hello, Kube!%   
+
+```
+
+
+
+Hello, Kube is running at  192.168.64.17:5000
+
+![hello-kube-app](/images/hello-kube-app.png) 
+
+
+
+To unistall the deployment and delete the repo
+
+
+```ShellSession
+
+helm delete hello 
+
+helm repo remove stable
+
+```
+
+
+
 
 ----Finished------
 
