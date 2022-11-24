@@ -6,17 +6,17 @@ Local Helm repositories offer privacy and security that helps organizations shar
 
 ## Advantages of Helm chart
 
-By making use of Helm, your business will immediately benefit from:
+By making use of Helm, business will immediately benefit from:
 
-Greatly improved productivity
-Reduced complexity of deployments
-Implementation of cloud-native applications
-More reproducible deployments and results
-Ability to leverage Kubernetes with a single CLI command
-Better scalability
-Ability to re-use Helm charts across multiple environments
-More streamlined CI/CD pipeline
-Easier rolling back to previous versions of an app
+* Greatly improved productivity
+* Reduced complexity of deployments
+* Implementation of cloud-native applications
+* More reproducible deployments and results
+* Ability to leverage Kubernetes with a single CLI command
+* Better scalability
+* Ability to re-use Helm charts across multiple environments
+* More streamlined CI/CD pipeline
+* Easier rolling back to previous versions of an app
 
 
 In this guide,  Harbor is deployed to Kubernetes as a local helm repository. A hello-kube python application is deployed using the harbor image registry. A helm chart is created for the hello-kube app and is uploaded to the harbor helm charts for the application deployment. 
