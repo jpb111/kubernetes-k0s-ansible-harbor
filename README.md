@@ -320,7 +320,7 @@ Deploy the yaml file
 
 ### 5. [Install](https://longhorn.io/docs/1.3.2/deploy/install/install-with-kubectl/) [longhorn](https://staging--longhornio.netlify.app/) block storage. 
 
-Longhorn has some [Prerequisites] (https://longhorn.io/docs/1.3.2/deploy/install/#installation-requirements).  install open-iscsi and NFSv4 client. These are already installed in step 3 as ansible a role prereq_longhorn.
+Longhorn has some [Prerequisites] (https://longhorn.io/docs/1.3.2/deploy/install/#installation-requirements).  Install open-iscsi and NFSv4 client. These are already installed in step 3 as ansible a role prereq_longhorn.
 
 
 ```ShellSession
