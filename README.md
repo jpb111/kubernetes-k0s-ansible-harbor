@@ -1034,7 +1034,7 @@ helm delete hello-kube
 
 ```
 
-To package the application as a helm chart and upload it a harbor helm chart registry
+Package the application as a helm chart and upload it to a harbor helm chart registry. 
 
 ```ShellSession
 
