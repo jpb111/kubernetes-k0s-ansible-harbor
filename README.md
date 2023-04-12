@@ -247,7 +247,7 @@ kube-system   metrics-server-5b898fd875-rplbk   1/1     Running   0          2m1
 
 ```ShellSession
 
-kubectl apply -f https://raw.githubusercontent.com/longhorn/longhorn/v1.3.2/deploy/longhorn.yaml
+kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.13.9/config/manifests/metallb-native.yaml
 
 ```
 
